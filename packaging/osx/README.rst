@@ -20,7 +20,7 @@ a. Create a dedicated user account and use it for all the next steps::
 
         sudo su - gtk
         cat << EOF > ~/.profile
-        export PATH=~/.local/bin:~/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/git/bin
+        export PATH=~/.new_local/bin:~/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/git/bin
         EOF
         . ~/.profile
 
@@ -28,17 +28,18 @@ a. Create a dedicated user account and use it for all the next steps::
 
 b. Download and run the gtk-osx-build-setup [3]_ script to install jhbuild::
 
-        curl -O https://raw.github.com/jralls/gtk-osx-build/master/gtk-osx-build-setup.sh
-        sh gtk-osx-build-setup.sh
+        curl -O https://raw.githubusercontent.com/jralls/gtk-osx-build/master/gtk-osx-setup.sh
+        sh gtk-osx-setup.sh
 
 c. Link or copy deluge osx jhbuildrc-custom::
 
-        ln -sf deluge/osx/jhbuildrc-custom ~/.jhbuildrc-custom
+        ln -s deluge/packaging/osx/jhbuildrc-custom ~/.jhbuildrc-custom
 
   *Note*: This setup builds only for `x86_64` arch to `/opt/gtk` prefix, feel free to edit.
 
 d. Build jhbuild and its modulesets: *(takes a while...)*::
 
+        jhbuild bootstrap-gtk-osx
         jhbuild bootstrap && jhbuild
 
   *Note*: If you encounter an error while building `glib` like::

@@ -1,6 +1,6 @@
 # Packaging setup with jhbuild
 
-These are the manual step based upon https://wiki.gnome.org/Projects/Jhbuild/Mac_OS
+These are the manual step based upon the [gtk-osx Quick Start](https://gitlab.gnome.org/GNOME/gtk-osx/-/wikis/home#quick-start)
 
 If you encounter curl stalling on FTP URLs try disabling `epsv` for curl:
 `echo no-epsv >> ~/.curlrc`
@@ -9,17 +9,12 @@ If you encounter curl stalling on FTP URLs try disabling `epsv` for curl:
 
         xcode-select --install
 
-1.  Install jhbuild:
-
-        curl -LO https://gitlab.gnome.org/GNOME/gtk-osx/raw/master/gtk-osx-build-setup.sh
-        sh gtk-osx-build-setup.sh
-        jhbuild bootstrap
+1.  Install jhbuild as user 'gtk'; see README.rst
 
 1.  GTK-OSX Build
-
     1.  Bootstrap GTK and install PyGTK
-
-            jhbuild build python meta-gtk-osx-bootstrap meta-gtk-osx-python
+        ```
+        jhbuild build python meta-gtk-osx-bootstrap meta-gtk-osx-python
 
     1.  GTK OSX Themes:
 
