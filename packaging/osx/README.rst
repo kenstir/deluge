@@ -22,7 +22,7 @@ a. Create a dedicated user account and use it for all the next steps::
         cat << EOF > ~/.profile
         export PATH=~/.new_local/bin:~/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/git/bin
         EOF
-        . ~/.profile
+        source ~/.profile
 
   *Note*: I'm using `gtk` login with `/opt/gtk` as home an jhbuild prefix.
 
@@ -52,7 +52,7 @@ d. Build jhbuild and its modulesets: *(takes a while...)*::
 
 5. Build the deluge moduleset: *(takes a while...)*::
 
-        jhbuild -m deluge/osx/deluge.modules build deluge
+        jhbuild -m file:deluge/packaging/osx/deluge.modules build deluge
 
   *Note*: This jhbuild moduleset *should* build and install all deluge dependencies not available in gtk-osx.
 
