@@ -12,9 +12,10 @@ If you encounter curl stalling on FTP URLs try disabling `epsv` for curl:
 1.  Install jhbuild as user 'gtk'; see README.rst
 
 1.  GTK-OSX Build
+
     1.  Bootstrap GTK and install PyGTK
-        ```
-        jhbuild build python meta-gtk-osx-bootstrap meta-gtk-osx-python
+
+            jhbuild build python meta-gtk-osx-bootstrap meta-gtk-osx-python
 
     1.  GTK OSX Themes:
 
