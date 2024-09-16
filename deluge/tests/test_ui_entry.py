@@ -409,6 +409,7 @@ class ConsoleUIWithDaemonBaseTestCase(UIWithDaemonBaseTestCase):
         assert std_output.endswith('Configuration value successfully updated.\n')
 
 
+# kenstir: this hangs on ubuntu 22.04
 @pytest.mark.usefixtures('daemon', 'client')
 class TestConsoleScriptEntryWithDaemon(BaseTestCase, ConsoleUIWithDaemonBaseTestCase):
     @pytest.fixture(autouse=True)
