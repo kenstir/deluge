@@ -349,23 +349,24 @@ class ConsoleUIWithDaemonBaseTestCase(UIWithDaemonBaseTestCase):
 
     @pytest_twisted.inlineCallbacks
     def test_console_command_add(self):
-        log = logging.getLogger('deluge')
-        log.info('kcxxx here')
-        log.debug('kcxxx here')
-        log.warning('kcxxx here')
+        log = logging.getLogger('kcxxx')
+        log.info('start')
 
         filename = common.get_test_data_file('test.torrent')
         self.patch_arg_command([f'add "{filename}"'])
         fd = StringFileDescriptor(sys.stdout)
         self.patch(sys, 'stdout', fd)
 
+        log.info('about to yield exec_command')
         yield self.exec_command()
+        log.info('after yield')
 
         std_output = fd.out.getvalue()
         assert (
             std_output
             == 'Attempting to add torrent: ' + filename + '\nTorrent added!\n'
         )
+        log.info('done')
 
     # @pytest_twisted.inlineCallbacks
     # def test_console_command_add_move_completed(self):
