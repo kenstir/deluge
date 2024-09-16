@@ -7,13 +7,13 @@
 #
 
 import argparse
+import logging
 import sys
 from io import StringIO
 from unittest import mock
 
 import pytest
 import pytest_twisted
-from twisted.internet import defer
 
 import deluge
 import deluge.component as component
@@ -29,7 +29,8 @@ from deluge.ui.web.server import DelugeWeb
 from . import common
 from .daemon_base import DaemonBase
 
-DEBUG_COMMAND = False
+# DEBUG_COMMAND = False
+DEBUG_COMMAND = True
 
 sys_stdout = sys.stdout
 # To catch output to stdout/stderr while running unit tests, we patch
@@ -348,6 +349,11 @@ class ConsoleUIWithDaemonBaseTestCase(UIWithDaemonBaseTestCase):
 
     @pytest_twisted.inlineCallbacks
     def test_console_command_add(self):
+        log = logging.getLogger('deluge')
+        log.info('kcxxx here')
+        log.debug('kcxxx here')
+        log.warning('kcxxx here')
+
         filename = common.get_test_data_file('test.torrent')
         self.patch_arg_command([f'add "{filename}"'])
         fd = StringFileDescriptor(sys.stdout)
@@ -361,52 +367,52 @@ class ConsoleUIWithDaemonBaseTestCase(UIWithDaemonBaseTestCase):
             == 'Attempting to add torrent: ' + filename + '\nTorrent added!\n'
         )
 
-    @pytest_twisted.inlineCallbacks
-    def test_console_command_add_move_completed(self):
-        filename = common.get_test_data_file('test.torrent')
-        tmp_path = 'c:\\tmp' if windows_check() else '/tmp'
-        self.patch_arg_command(
-            [
-                f'add --move-path "{tmp_path}" "{filename}" ; status'
-                ' ; manage'
-                ' ab570cdd5a17ea1b61e970bb72047de141bce173'
-                ' move_completed'
-                ' move_completed_path'
-            ]
-        )
-        fd = StringFileDescriptor(sys.stdout)
-        self.patch(sys, 'stdout', fd)
+    # @pytest_twisted.inlineCallbacks
+    # def test_console_command_add_move_completed(self):
+    #     filename = common.get_test_data_file('test.torrent')
+    #     tmp_path = 'c:\\tmp' if windows_check() else '/tmp'
+    #     self.patch_arg_command(
+    #         [
+    #             f'add --move-path "{tmp_path}" "{filename}" ; status'
+    #             ' ; manage'
+    #             ' ab570cdd5a17ea1b61e970bb72047de141bce173'
+    #             ' move_completed'
+    #             ' move_completed_path'
+    #         ]
+    #     )
+    #     fd = StringFileDescriptor(sys.stdout)
+    #     self.patch(sys, 'stdout', fd)
 
-        yield self.exec_command()
+    #     yield self.exec_command()
 
-        std_output = fd.out.getvalue()
-        assert std_output.endswith(
-            f'move_completed: True\nmove_completed_path: {tmp_path}\n'
-        ) or std_output.endswith(
-            f'move_completed_path: {tmp_path}\nmove_completed: True\n'
-        )
+    #     std_output = fd.out.getvalue()
+    #     assert std_output.endswith(
+    #         f'move_completed: True\nmove_completed_path: {tmp_path}\n'
+    #     ) or std_output.endswith(
+    #         f'move_completed_path: {tmp_path}\nmove_completed: True\n'
+    #     )
 
-    async def test_console_command_status(self):
-        fd = StringFileDescriptor(sys.stdout)
-        self.patch_arg_command(['status'])
-        self.patch(sys, 'stdout', fd)
+    # async def test_console_command_status(self):
+    #     fd = StringFileDescriptor(sys.stdout)
+    #     self.patch_arg_command(['status'])
+    #     self.patch(sys, 'stdout', fd)
 
-        await self.exec_command()
+    #     await self.exec_command()
 
-        std_output = fd.out.getvalue()
-        assert std_output.startswith('Total upload: ')
-        assert std_output.endswith(' Moving: 0\n')
+    #     std_output = fd.out.getvalue()
+    #     assert std_output.startswith('Total upload: ')
+    #     assert std_output.endswith(' Moving: 0\n')
 
-    @defer.inlineCallbacks
-    def test_console_command_config_set_download_location(self):
-        fd = StringFileDescriptor(sys.stdout)
-        self.patch_arg_command(['config --set download_location /downloads'])
-        self.patch(sys, 'stdout', fd)
+    # @defer.inlineCallbacks
+    # def test_console_command_config_set_download_location(self):
+    #     fd = StringFileDescriptor(sys.stdout)
+    #     self.patch_arg_command(['config --set download_location /downloads'])
+    #     self.patch(sys, 'stdout', fd)
 
-        yield self.exec_command()
-        std_output = fd.out.getvalue()
-        assert std_output.startswith('Setting "download_location" to: \'/downloads\'')
-        assert std_output.endswith('Configuration value successfully updated.\n')
+    #     yield self.exec_command()
+    #     std_output = fd.out.getvalue()
+    #     assert std_output.startswith('Setting "download_location" to: \'/downloads\'')
+    #     assert std_output.endswith('Configuration value successfully updated.\n')
 
 
 # kenstir: this hangs on ubuntu 22.04

@@ -31,6 +31,7 @@ def disable_new_release_check():
 
 
 def setup_test_logger(level='info', prefix='deluge'):
+    print('kcxxx logging to {}.log'.format(prefix))
     deluge.log.setup_logger(level, filename='%s.log' % prefix, twisted_observer=False)
 
 
