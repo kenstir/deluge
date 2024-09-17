@@ -58,16 +58,22 @@ class StringFileDescriptor:
 
 
 class UIBaseTestCase:
+    log = None
+
     def set_up(self):
         common.setup_test_logger(level='info', prefix=self.config_dir / self.id())
+        self.log = logging.getLogger('kcxxx')
+        self.log.info('UIBaseTestCase:set_up')
         return component.start()
 
     def tear_down(self):
+        self.log.info('UIBaseTestCase:tear_down')
         return component.shutdown()
 
     def exec_command(self):
         if DEBUG_COMMAND:
             print('Executing: %s\n' % sys.argv, file=sys_stdout)
+        logging.getLogger('kcxxx').info('UIBaseTestCase:exec_command: %s' % sys.argv)
         return self.var['start_cmd']()
 
 
@@ -326,11 +332,15 @@ class ConsoleUIWithDaemonBaseTestCase(UIWithDaemonBaseTestCase):
     """Implement Console tests that require a running daemon"""
 
     def set_up(self):
+        log = logging.getLogger('kcxxx')
+        log.info('set_up')
         # Avoid calling reactor.shutdown after commands are executed by main.exec_args()
         deluge.ui.console.main.reactor = common.ReactorOverride()
         return UIWithDaemonBaseTestCase.set_up(self)
 
     def patch_arg_command(self, command):
+        log = logging.getLogger('kcxxx')
+        log.info('patch_arg_command')
         if isinstance(command, str):
             command = [command]
         username, password = get_localhost_auth()
@@ -350,16 +360,16 @@ class ConsoleUIWithDaemonBaseTestCase(UIWithDaemonBaseTestCase):
     @pytest_twisted.inlineCallbacks
     def test_console_command_add(self):
         log = logging.getLogger('kcxxx')
-        log.info('start')
+        log.info('test_console_command_add: start')
 
         filename = common.get_test_data_file('test.torrent')
         self.patch_arg_command([f'add "{filename}"'])
         fd = StringFileDescriptor(sys.stdout)
         self.patch(sys, 'stdout', fd)
 
-        log.info('about to yield exec_command')
+        log.info('test_console_command_add: about to yield exec_command')
         yield self.exec_command()
-        log.info('after yield')
+        log.info('test_console_command_add: after yield')
 
         std_output = fd.out.getvalue()
         assert (
