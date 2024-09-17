@@ -58,22 +58,24 @@ class StringFileDescriptor:
 
 
 class UIBaseTestCase:
-    log = None
-
     def set_up(self):
         common.setup_test_logger(level='info', prefix=self.config_dir / self.id())
-        self.log = logging.getLogger('kcxxx')
-        self.log.info('UIBaseTestCase:set_up')
+        logging.getLogger('kcxxx').info('UIBaseTestCase:set_up')
         return component.start()
 
     def tear_down(self):
-        self.log.info('UIBaseTestCase:tear_down')
+        logging.getLogger('kcxxx').info('UIBaseTestCase:tear_down')
         return component.shutdown()
 
     def exec_command(self):
         if DEBUG_COMMAND:
             print('Executing: %s\n' % sys.argv, file=sys_stdout)
-        logging.getLogger('kcxxx').info('UIBaseTestCase:exec_command: %s' % sys.argv)
+        logging.getLogger('kcxxx').info(
+            'UIBaseTestCase:exec_command: argv=%s' % sys.argv
+        )
+        logging.getLogger('kcxxx').info(
+            'UIBaseTestCase:exec_command: start_cmd=%s', self.var['start_cmd']
+        )
         return self.var['start_cmd']()
 
 
@@ -83,6 +85,7 @@ class UIWithDaemonBaseTestCase(UIBaseTestCase, DaemonBase):
     def set_up(self):
         d = self.common_set_up()
         common.setup_test_logger(level='info', prefix=self.config_dir / self.id())
+        logging.getLogger('kcxxx').info('UIWithDaemonBaseTestCase:set_up')
         return d
 
 

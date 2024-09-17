@@ -6,6 +6,8 @@
 # See LICENSE for more details.
 #
 
+import logging
+
 from deluge.ui.console.console import Console
 
 UI_PATH = __path__[0]
@@ -21,4 +23,5 @@ def test_start():
     A workaround for unit tests which require a deferred object to be
     returned to run properly due to mocking the Twisted reactor.
     """
+    logging.getLogger('kcxxx').info('test_start: about to Console().start()')
     return Console().start()

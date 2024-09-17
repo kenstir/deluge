@@ -88,6 +88,9 @@ class DelugeRPCProtocol(DelugeTransferProtocol):
         self.factory.daemon.port = peer.port
         self.factory.daemon.connected = True
         log.debug('Connected to daemon at %s:%s..', peer.host, peer.port)
+        logging.getLogger('kcxxx').info(
+            'Connected to daemon at %s:%s..', peer.host, peer.port
+        )
         self.factory.daemon.connect_deferred.callback((peer.host, peer.port))
 
     def message_received(self, request):
@@ -112,6 +115,7 @@ class DelugeRPCProtocol(DelugeTransferProtocol):
         if message_type == RPC_EVENT:
             event = request[1]
             # log.debug('Received RPCEvent: %s', event)
+            logging.getLogger('kcxxx').info('Received RPCEvent: %s', event)
             # A RPCEvent was received from the daemon so run any handlers
             # associated with it.
             if event in self.factory.event_handlers:
@@ -192,6 +196,9 @@ class DelugeRPCProtocol(DelugeTransferProtocol):
             # out the error for debugging purposes.
             self.__rpc_requests[request.request_id] = request
             # log.debug('Sending RPCRequest %s: %s', request.request_id, request)
+            logging.getLogger('kcxxx').info(
+                'Sending RPCRequest %s: %s', request.request_id, request
+            )
             # Send the request in a tuple because multiple requests can be sent at once
             self.transfer_message((request.format_message(),))
         except Exception as ex:
@@ -207,6 +214,9 @@ class DelugeRPCClientFactory(ClientFactory):
 
     def startedConnecting(self, connector):  # NOQA: N802
         log.debug('Connecting to daemon at "%s:%s"...', connector.host, connector.port)
+        logging.getLogger('kcxxx').info(
+            'Connecting to daemon at "%s:%s"...', connector.host, connector.port
+        )
 
     def clientConnectionFailed(self, connector, reason):  # NOQA: N802
         log.debug(

@@ -135,6 +135,8 @@ class Console(UI):
             self.console_cmds[cmd].add_subparser(subparsers)
 
     def start(self):
+        logging.getLogger('kcxxx').info('Console::start')
+
         if self.ui_args is None:
             # Started directly by deluge-console script so must find the UI args manually
             options, remaining = ArgParserBase(common_help=False).parse_known_args()
