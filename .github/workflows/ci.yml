@@ -84,8 +84,8 @@ jobs:
           python -c 'from deluge._libtorrent import lt; print(lt.__version__)';
           # echo $DEBUG_PREFIX pytest -s -v -m "not (todo or gtkui)" deluge
           # $DEBUG_PREFIX pytest -s -v -m "not (todo or gtkui)" deluge
-          echo $DEBUG_PREFIX pytest -s -v -k TestConsoleScriptEntryWithDaemon deluge/tests/test_ui_entry.py
-          $DEBUG_PREFIX pytest -s -v -k TestConsoleScriptEntryWithDaemon deluge/tests/test_ui_entry.py
+          echo $DEBUG_PREFIX pytest --loglevel=debug -s -v -k TestConsoleScriptEntryWithDaemon deluge/tests/test_ui_entry.py
+          $DEBUG_PREFIX pytest --loglevel=debug -s -v -k TestConsoleScriptEntryWithDaemon deluge/tests/test_ui_entry.py
 
       - uses: actions/upload-artifact@v4
         # capture all crashes as build artifacts
