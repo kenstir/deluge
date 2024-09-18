@@ -150,6 +150,9 @@ class Console(UI):
         from deluge.ui.console.main import ConsoleUI  # import here because (see top)
 
         def run(options):
+            logging.getLogger('kcxxx').info(
+                'Console::start::run cmds=%s', self.console_cmds
+            )
             try:
                 c = ConsoleUI(self.options, self.console_cmds, self.parser.log_stream)
                 return c.start_ui()
