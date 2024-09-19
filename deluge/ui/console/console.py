@@ -146,7 +146,9 @@ class Console(UI):
         self.console_parser.subcommand = False
         self.parser.subcommand = False if i == -1 else True
 
+        logging.getLogger('kcxxx').info('Console::start: about to call super().start')
         super().start(self.console_parser)
+        logging.getLogger('kcxxx').info('Console::start: about to import ConsoleUI')
         from deluge.ui.console.main import ConsoleUI  # import here because (see top)
 
         def run(options):
