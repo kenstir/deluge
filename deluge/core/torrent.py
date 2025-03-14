@@ -1117,6 +1117,7 @@ class Torrent:
             'move_completed_path': lambda: self.options['move_completed_path'],
             'move_completed': lambda: self.options['move_completed'],
             'next_announce': lambda: self.status.next_announce.seconds,
+            'min_announce': lambda: self.status.min_announce.seconds,
             'num_peers': lambda: self.status.num_peers - self.status.num_seeds,
             'num_seeds': lambda: self.status.num_seeds,
             'owner': lambda: self.options['owner'],

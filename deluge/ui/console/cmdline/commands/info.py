@@ -36,6 +36,7 @@ STATUS_KEYS = [
     'tracker_host',
     'tracker_status',
     'next_announce',
+    'min_announce',
     'name',
     'total_size',
     'progress',
