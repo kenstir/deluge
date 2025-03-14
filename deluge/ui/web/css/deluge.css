@@ -178,6 +178,7 @@ dl.singleline dd {
 .x-deluge-status dd.uploaded,
 .x-deluge-status dd.share,
 .x-deluge-status dd.announce,
+.x-deluge-status dd.min_announce,
 .x-deluge-status dd.tracker_status {
     width: 200px;
     margin-left: 100px;
