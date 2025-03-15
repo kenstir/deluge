@@ -1092,7 +1092,7 @@ class Torrent:
         if not self.status.current_tracker:
             return min_announce
         for tracker in self.trackers:
-            if tracker['url'] == self.status.current_tracker:
+            if tracker.get('url', '-') == self.status.current_tracker:
                 for endpoint in tracker['endpoints']:
                     if 'min_announce' in endpoint:
                         return endpoint['min_announce']
@@ -1401,6 +1401,7 @@ class Torrent:
     def force_reannounce(self):
         """Force a tracker reannounce"""
         try:
+            log.info('%s: force_reannounce', self.torrent_id)
             self.handle.force_reannounce()
         except RuntimeError as ex:
             log.debug('Unable to force reannounce: %s', ex)
