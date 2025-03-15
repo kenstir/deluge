@@ -1415,7 +1415,7 @@ class TorrentManager(component.Component):
             torrent.torrent_id,
             caller,
             alert.url,
-            torrent.status.current_tracker
+            torrent.status.current_tracker,
         )
         for tracker in torrent.handle.trackers():
             if tracker['url'] == alert.url:
@@ -1426,10 +1426,12 @@ class TorrentManager(component.Component):
                     next_announce = endpoint.get('next_announce', 0)
                     log.info(
                         '%s: %s:   endpoint=%s next_announce=%d min_announce=%d (%d)',
-                        torrent.torrent_id, caller, endpoint['local_address'],
+                        torrent.torrent_id,
+                        caller,
+                        endpoint['local_address'],
                         next_announce,
                         min_announce,
-                        next_announce - min_announce
+                        next_announce - min_announce,
                     )
 
     def on_alert_storage_moved(self, alert):
