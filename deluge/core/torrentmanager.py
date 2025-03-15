@@ -1410,7 +1410,7 @@ class TorrentManager(component.Component):
 
     def dump_tracker_info(self, alert, torrent, caller):
         """Dump tracker info for debugging"""
-        log.info('kcxxx: %s: url=%s current_tracker=%s', caller, alert.url, torrent.current_tracker)
+        log.info('kcxxx: %s: url=%s current_tracker=%s', caller, alert.url, torrent.status.current_tracker)
         for tracker in torrent.handle.trackers():
             if tracker['url'] == alert.url:
                 for endpoint in tracker['endpoints']:
