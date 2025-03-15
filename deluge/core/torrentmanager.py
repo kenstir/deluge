@@ -1355,7 +1355,7 @@ class TorrentManager(component.Component):
         if torrent.status.num_complete == -1 or torrent.status.num_incomplete == -1:
             torrent.scrape_tracker()
 
-        self.dump_tracker_info(alert, torrent, 'on_reply')
+        self.dump_tracker_info(alert, torrent, 'rpy')
 
     def on_alert_tracker_announce(self, alert):
         """Alert handler for libtorrent tracker_announce_alert"""
@@ -1367,7 +1367,7 @@ class TorrentManager(component.Component):
         # Set the tracker status for the torrent
         torrent.set_tracker_status('Announce Sent')
 
-        self.dump_tracker_info(alert, torrent, 'on_announce')
+        self.dump_tracker_info(alert, torrent, 'ann')
 
     def on_alert_tracker_warning(self, alert):
         """Alert handler for libtorrent tracker_warning_alert"""
@@ -1378,7 +1378,7 @@ class TorrentManager(component.Component):
         # Set the tracker status for the torrent
         torrent.set_tracker_status('Warning: %s' % decode_bytes(alert.message()))
 
-        self.dump_tracker_info(alert, torrent, 'on_warning')
+        self.dump_tracker_info(alert, torrent, 'wrn')
 
     def on_alert_tracker_error(self, alert):
         """Alert handler for libtorrent tracker_error_alert"""
@@ -1406,7 +1406,7 @@ class TorrentManager(component.Component):
                     torrent.set_tracker_status('Error: ' + error_message)
                 break
 
-        self.dump_tracker_info(alert, torrent, 'on_error')
+        self.dump_tracker_info(alert, torrent, 'err')
 
     def dump_tracker_info(self, alert, torrent, caller):
         """Dump tracker info for debugging"""
