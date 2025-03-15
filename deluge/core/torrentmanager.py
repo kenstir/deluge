@@ -1410,7 +1410,13 @@ class TorrentManager(component.Component):
 
     def dump_tracker_info(self, alert, torrent, caller):
         """Dump tracker info for debugging"""
-        log.info('%s: %s: url=%s current_tracker=%s', torrent.torrent_id, caller, alert.url, torrent.status.current_tracker)
+        log.info(
+            '%s: %s: url=%s current_tracker=%s',
+            torrent.torrent_id,
+            caller,
+            alert.url,
+            torrent.status.current_tracker
+        )
         for tracker in torrent.handle.trackers():
             if tracker['url'] == alert.url:
                 for endpoint in tracker['endpoints']:
@@ -1418,7 +1424,13 @@ class TorrentManager(component.Component):
                         pass
                     min_announce = endpoint.get('min_announce', 0)
                     next_announce = endpoint.get('next_announce', 0)
-                    log.info('%s: %s:   endpoint=%s next_announce=%d min_announce=%d (%d)', torrent.torrent_id, caller, endpoint['local_address'], next_announce, min_announce, next_announce - min_announce)
+                    log.info(
+                        '%s: %s:   endpoint=%s next_announce=%d min_announce=%d (%d)',
+                        torrent.torrent_id, caller, endpoint['local_address'],
+                        next_announce,
+                        min_announce,
+                        next_announce - min_announce
+                    )
 
     def on_alert_storage_moved(self, alert):
         """Alert handler for libtorrent storage_moved_alert"""
