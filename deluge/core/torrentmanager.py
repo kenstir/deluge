@@ -28,6 +28,7 @@ from deluge.common import (
     VersionSplit,
     archive_files,
     decode_bytes,
+    ftime,
     get_magnet_info,
     is_magnet,
 )
@@ -1408,6 +1409,14 @@ class TorrentManager(component.Component):
 
         self.dump_tracker_info(alert, torrent, 'err')
 
+    def format_time(self, time):
+        if time > 0:
+            return ftime(time)
+        elif time == 0:
+            return '-'
+        else:
+            return '∞'
+
     def dump_tracker_info(self, alert, torrent, caller):
         """Dump tracker info for debugging"""
         log.info(
@@ -1417,20 +1426,25 @@ class TorrentManager(component.Component):
             alert.url,
             torrent.status.current_tracker,
         )
+        now = int(time.time())
         for tracker in torrent.handle.trackers():
             if tracker['url'] == alert.url:
                 for endpoint in tracker['endpoints']:
                     if endpoint['local_address'][0] == '127.0.0.1':
                         pass
-                    min_announce = endpoint.get('min_announce', 0)
-                    next_announce = endpoint.get('next_announce', 0)
+                    min_announce = endpoint.get('min_announce', -1)
+                    if min_announce > 0:
+                        min_announce = min_announce - now
+                    next_announce = endpoint.get('next_announce', -1)
+                    if next_announce > 0:
+                        next_announce = next_announce - now
                     log.info(
-                        '%s: %s:   endpoint=%s next_announce=%d min_announce=%d (%d)',
+                        '%s: %s:   endpoint=%s next_announce=%s min_announce=%s (%d)',
                         torrent.torrent_id,
                         caller,
                         endpoint['local_address'],
-                        next_announce,
-                        min_announce,
+                        self.format_time(next_announce),
+                        self.format_time(min_announce),
                         next_announce - min_announce,
                     )
 
