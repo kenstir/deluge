@@ -22,7 +22,6 @@ class TrackersTab(Tab):
         super().__init__('Trackers', 'trackers_tab', 'trackers_tab_label')
 
         self.add_tab_widget('summary_next_announce', ftime, ('next_announce',))
-        self.add_tab_widget('summary_min_announce', ftime, ('min_announce',))
         self.add_tab_widget('summary_tracker', None, ('tracker_host',))
         self.add_tab_widget('summary_tracker_status', ftranslate, ('tracker_status',))
         self.add_tab_widget('summary_tracker_total', fcount, ('trackers',))
