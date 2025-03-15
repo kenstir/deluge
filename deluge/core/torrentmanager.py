@@ -1355,6 +1355,11 @@ class TorrentManager(component.Component):
         if torrent.status.num_complete == -1 or torrent.status.num_incomplete == -1:
             torrent.scrape_tracker()
 
+        for tracker in torrent.handle.trackers():
+            if tracker['url'] == alert.url:
+                for endpoint in torrent.tracker['endpoints']:
+                    log.info('kcxxx: on_alert_tracker_reply: %s', endpoint)
+
     def on_alert_tracker_announce(self, alert):
         """Alert handler for libtorrent tracker_announce_alert"""
         try:
@@ -1365,6 +1370,11 @@ class TorrentManager(component.Component):
         # Set the tracker status for the torrent
         torrent.set_tracker_status('Announce Sent')
 
+        for tracker in torrent.handle.trackers():
+            if tracker['url'] == alert.url:
+                for endpoint in torrent.tracker['endpoints']:
+                    log.info('kcxxx: on_alert_tracker_announce: %s', endpoint)
+
     def on_alert_tracker_warning(self, alert):
         """Alert handler for libtorrent tracker_warning_alert"""
         try:
@@ -1373,6 +1383,11 @@ class TorrentManager(component.Component):
             return
         # Set the tracker status for the torrent
         torrent.set_tracker_status('Warning: %s' % decode_bytes(alert.message()))
+
+        for tracker in torrent.handle.trackers():
+            if tracker['url'] == alert.url:
+                for endpoint in torrent.tracker['endpoints']:
+                    log.info('kcxxx: on_alert_tracker_warning: %s', endpoint)
 
     def on_alert_tracker_error(self, alert):
         """Alert handler for libtorrent tracker_error_alert"""
@@ -1399,6 +1414,11 @@ class TorrentManager(component.Component):
                 else:
                     torrent.set_tracker_status('Error: ' + error_message)
                 break
+
+        for tracker in torrent.handle.trackers():
+            if tracker['url'] == alert.url:
+                for endpoint in tracker['endpoints']:
+                    log.info('kcxxx: on_alert_tracker_error: %s', endpoint)
 
     def on_alert_storage_moved(self, alert):
         """Alert handler for libtorrent storage_moved_alert"""
