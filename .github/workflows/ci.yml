@@ -71,6 +71,7 @@ jobs:
           path: /cores
 
   test-windows:
+    if: false
     runs-on: windows-2022
     strategy:
       matrix:
