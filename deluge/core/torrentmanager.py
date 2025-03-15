@@ -1411,7 +1411,7 @@ class TorrentManager(component.Component):
     def dump_tracker_info(self, alert, torrent, caller):
         """Dump tracker info for debugging"""
         log.info(
-            '%s: %s: url=%s current_tracker=%s',
+            '%s: %s: url=%s curr=%s',
             torrent.torrent_id,
             caller,
             alert.url,
