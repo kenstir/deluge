@@ -1086,6 +1086,18 @@ class Torrent:
         self._status = status
         self._status_last_update = time.time()
 
+    def _get_min_announce(self):
+        """Get the minimum announce time for the torrent"""
+        min_announce = -1
+        if not self.status.current_tracker:
+            return min_announce
+        for tracker in self.trackers:
+            if tracker['url'] == self.status.current_tracker:
+                for endpoint in tracker['endpoints']:
+                    if 'min_announce' in endpoint:
+                        return endpoint['min_announce']
+        return min_announce
+
     def _create_status_funcs(self):
         """Creates the functions for getting torrent status"""
         self.status_funcs = {
@@ -1117,6 +1129,7 @@ class Torrent:
             'move_completed_path': lambda: self.options['move_completed_path'],
             'move_completed': lambda: self.options['move_completed'],
             'next_announce': lambda: self.status.next_announce.seconds,
+            'min_announce': lambda: self._get_min_announce(),
             'num_peers': lambda: self.status.num_peers - self.status.num_seeds,
             'num_seeds': lambda: self.status.num_seeds,
             'owner': lambda: self.options['owner'],
