@@ -1413,30 +1413,33 @@ class TorrentManager(component.Component):
         if time > 0:
             return ftime(time)
         elif time == 0:
-            return '-'
+            return '0'
         else:
             return '∞'
 
     def dump_tracker_info(self, alert, torrent, caller):
         """Dump tracker info for debugging"""
         log.info(
-            '%s: %s: url=%s curr=%s',
+            '%s: %s: url=%s',
             torrent.torrent_id,
             caller,
             alert.url,
+        )
+        log.info(
+            '%s: %s: curr=%s',
+            torrent.torrent_id,
+            caller,
             torrent.status.current_tracker,
         )
         now = int(time.time())
         for tracker in torrent.handle.trackers():
             if tracker['url'] == alert.url:
                 for endpoint in tracker['endpoints']:
-                    if endpoint['local_address'][0] == '127.0.0.1':
-                        pass
                     min_announce = endpoint.get('min_announce', -1)
-                    if min_announce > 0:
+                    if min_announce >= 0:
                         min_announce = min_announce - now
                     next_announce = endpoint.get('next_announce', -1)
-                    if next_announce > 0:
+                    if next_announce >= 0:
                         next_announce = next_announce - now
                     log.info(
                         '%s: %s:   endpoint=%s next_announce=%s min_announce=%s (%d)',
