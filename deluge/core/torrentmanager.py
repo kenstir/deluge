@@ -1355,7 +1355,7 @@ class TorrentManager(component.Component):
         if torrent.status.num_complete == -1 or torrent.status.num_incomplete == -1:
             torrent.scrape_tracker()
 
-        self.dump_tracker_info(alert, torrent, 'on_alert_tracker_reply')
+        self.dump_tracker_info(alert, torrent, 'on_reply')
 
     def on_alert_tracker_announce(self, alert):
         """Alert handler for libtorrent tracker_announce_alert"""
@@ -1367,7 +1367,7 @@ class TorrentManager(component.Component):
         # Set the tracker status for the torrent
         torrent.set_tracker_status('Announce Sent')
 
-        self.dump_tracker_info(alert, torrent, 'on_alert_tracker_announce')
+        self.dump_tracker_info(alert, torrent, 'on_announce')
 
     def on_alert_tracker_warning(self, alert):
         """Alert handler for libtorrent tracker_warning_alert"""
@@ -1378,7 +1378,7 @@ class TorrentManager(component.Component):
         # Set the tracker status for the torrent
         torrent.set_tracker_status('Warning: %s' % decode_bytes(alert.message()))
 
-        self.dump_tracker_info(alert, torrent, 'on_alert_tracker_warning')
+        self.dump_tracker_info(alert, torrent, 'on_warning')
 
     def on_alert_tracker_error(self, alert):
         """Alert handler for libtorrent tracker_error_alert"""
@@ -1406,17 +1406,19 @@ class TorrentManager(component.Component):
                     torrent.set_tracker_status('Error: ' + error_message)
                 break
 
-        self.dump_tracker_info(alert, torrent, 'on_alert_tracker_error')
+        self.dump_tracker_info(alert, torrent, 'on_error')
 
     def dump_tracker_info(self, alert, torrent, caller):
         """Dump tracker info for debugging"""
-        log.info('kcxxx: %s: url=%s current_tracker=%s', caller, alert.url, torrent.status.current_tracker)
+        log.info('%s: %s: url=%s current_tracker=%s', torrent.torrent_id, caller, alert.url, torrent.status.current_tracker)
         for tracker in torrent.handle.trackers():
             if tracker['url'] == alert.url:
                 for endpoint in tracker['endpoints']:
+                    if endpoint['local_address'][0] == '127.0.0.1':
+                        pass
                     min_announce = endpoint.get('min_announce', 0)
                     next_announce = endpoint.get('next_announce', 0)
-                    log.info('kcxxx: %s: next_announce=%d min_announce=%d (%d)', caller, next_announce, min_announce, next_announce - min_announce)
+                    log.info('%s: %s: next_announce=%d min_announce=%d (%d)', torrent.torrent_id, caller, next_announce, min_announce, next_announce - min_announce)
 
     def on_alert_storage_moved(self, alert):
         """Alert handler for libtorrent storage_moved_alert"""
