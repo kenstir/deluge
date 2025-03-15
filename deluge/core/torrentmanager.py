@@ -1355,6 +1355,7 @@ class TorrentManager(component.Component):
         if torrent.status.num_complete == -1 or torrent.status.num_incomplete == -1:
             torrent.scrape_tracker()
 
+        log.info('kcxxx: on_alert_tracker_reply: %s', alert.url)
         for tracker in torrent.handle.trackers():
             if tracker['url'] == alert.url:
                 for endpoint in torrent.tracker['endpoints']:
@@ -1370,6 +1371,7 @@ class TorrentManager(component.Component):
         # Set the tracker status for the torrent
         torrent.set_tracker_status('Announce Sent')
 
+        log.info('kcxxx: on_alert_tracker_announce: %s', alert.url)
         for tracker in torrent.handle.trackers():
             if tracker['url'] == alert.url:
                 for endpoint in torrent.tracker['endpoints']:
@@ -1384,6 +1386,7 @@ class TorrentManager(component.Component):
         # Set the tracker status for the torrent
         torrent.set_tracker_status('Warning: %s' % decode_bytes(alert.message()))
 
+        log.info('kcxxx: on_alert_tracker_warning: %s', alert.url)
         for tracker in torrent.handle.trackers():
             if tracker['url'] == alert.url:
                 for endpoint in torrent.tracker['endpoints']:
@@ -1415,6 +1418,7 @@ class TorrentManager(component.Component):
                     torrent.set_tracker_status('Error: ' + error_message)
                 break
 
+        log.info('kcxxx: on_alert_tracker_error: %s', alert.url)
         for tracker in torrent.handle.trackers():
             if tracker['url'] == alert.url:
                 for endpoint in tracker['endpoints']:
