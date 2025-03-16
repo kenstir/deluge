@@ -1419,7 +1419,12 @@ class TorrentManager(component.Component):
 
     def dump_tracker_info(self, alert, torrent, caller):
         """Dump tracker info for debugging"""
-        curr = "curr" if torrent.status.current_tracker == alert.url else "!= curr" if torrent.status.current_tracker else ""
+        if torrent.status.current_tracker == alert.url:
+            curr = 'curr'
+        elif torrent.status.current_tracker:
+            curr = '!= curr'
+        else:
+            curr = ''
         log.info(
             '%s: %s: url=%s (%s)',
             torrent.torrent_id,
