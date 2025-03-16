@@ -1379,7 +1379,7 @@ class TorrentManager(component.Component):
         # Set the tracker status for the torrent
         torrent.set_tracker_status('Warning: %s' % decode_bytes(alert.message()))
 
-        self.dump_tracker_info(alert, torrent, 'wrn')
+        self.dump_tracker_info(alert, torrent, 'wrn', decode_bytes(alert.message()))
 
     def on_alert_tracker_error(self, alert):
         """Alert handler for libtorrent tracker_error_alert"""
@@ -1407,7 +1407,7 @@ class TorrentManager(component.Component):
                     torrent.set_tracker_status('Error: ' + error_message)
                 break
 
-        self.dump_tracker_info(alert, torrent, 'err')
+        self.dump_tracker_info(alert, torrent, 'err', error_message)
 
     def format_time(self, time):
         if time > 0:
@@ -1417,21 +1417,12 @@ class TorrentManager(component.Component):
         else:
             return '∞'
 
-    def dump_tracker_info(self, alert, torrent, caller):
+    def trim_url(self, url):
+        url = url.replace('udp://', 'https://').replace('https://', '').split('/')[0]
+        return url
+
+    def dump_tracker_info(self, alert, torrent, caller, msg=''):
         """Dump tracker info for debugging"""
-        if torrent.status.current_tracker == alert.url:
-            curr = 'curr'
-        elif torrent.status.current_tracker:
-            curr = '!= curr'
-        else:
-            curr = ''
-        log.info(
-            '%s: %s: url=%s (%s)',
-            torrent.torrent_id,
-            caller,
-            alert.url,
-            curr,
-        )
         now = int(time.time())
         for tracker in torrent.handle.trackers():
             if tracker['url'] == alert.url:
@@ -1443,13 +1434,13 @@ class TorrentManager(component.Component):
                     if next_announce >= 0:
                         next_announce = next_announce - now
                     log.info(
-                        '%s: %s:   endpoint=%s next_announce=%s min_announce=%s (%d)',
+                        '%s: %s: next_ann: %s min_ann:%s (%d) msg: %s',
                         torrent.torrent_id,
                         caller,
-                        endpoint['local_address'],
                         self.format_time(next_announce),
                         self.format_time(min_announce),
                         next_announce - min_announce,
+                        msg,
                     )
 
     def on_alert_storage_moved(self, alert):
