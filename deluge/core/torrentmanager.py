@@ -1435,9 +1435,10 @@ class TorrentManager(component.Component):
                     min_announce_interval = min_announce - now if min_announce >= 0 else 0
                     if caller == 'ann':
                         log.info(
-                            '%s: %s: announce sent url:%s %s',
+                            '%s: %s: now:%d announce sent url:%s %s',
                             torrent.torrent_id,
                             caller,
+                            now,
                             url,
                             cur,
                         )
