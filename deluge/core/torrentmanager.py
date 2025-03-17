@@ -1433,19 +1433,26 @@ class TorrentManager(component.Component):
                     next_announce_interval = next_announce - now if next_announce >= 0 else 0
                     min_announce = endpoint.get('min_announce', -1)
                     min_announce_interval = min_announce - now if min_announce >= 0 else 0
-                    log.info(
-                        '%s: %s: now:%d next:%d (%s) min:%d (%s) msg:%s url:%s %s',
-                        torrent.torrent_id,
-                        caller,
-                        now,
-                        next_announce,
-                        self.format_time(next_announce_interval),
-                        min_announce,
-                        self.format_time(min_announce_interval),
-                        msg,
-                        url,
-                        cur,
-                    )
+                    if caller == 'ann':
+                        log.info(
+                            '%s: %s: announce sent url:%s %s',
+                            torrent.torrent_id,
+                            caller,
+                            url,
+                            cur,
+                        )
+                    else:
+                        log.info(
+                            '%s: %s: now:%d next:%d (%s) min:%d (%s) msg:%s',
+                            torrent.torrent_id,
+                            caller,
+                            now,
+                            next_announce,
+                            self.format_time(next_announce_interval),
+                            min_announce,
+                            self.format_time(min_announce_interval),
+                            msg,
+                        )
 
     def on_alert_storage_moved(self, alert):
         """Alert handler for libtorrent storage_moved_alert"""
