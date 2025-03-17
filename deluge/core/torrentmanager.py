@@ -1434,9 +1434,10 @@ class TorrentManager(component.Component):
                     min_announce = endpoint.get('min_announce', -1)
                     min_announce_interval = min_announce - now if min_announce >= 0 else 0
                     log.info(
-                        '%s: %s: next_ann:%d (%s) min_ann:%d (%s) msg:%s url:%s %s',
+                        '%s: %s: now:%d next:%d (%s) min:%d (%s) msg:%s url:%s %s',
                         torrent.torrent_id,
                         caller,
+                        now,
                         next_announce,
                         self.format_time(next_announce_interval),
                         min_announce,
