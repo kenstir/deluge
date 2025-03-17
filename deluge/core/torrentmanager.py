@@ -1429,19 +1429,18 @@ class TorrentManager(component.Component):
                 url = self.trim_url(alert.url)
                 cur = '(curr)' if alert.url == torrent.status.current_tracker else ''
                 for endpoint in tracker['endpoints']:
-                    min_announce = endpoint.get('min_announce', -1)
-                    if min_announce >= 0:
-                        min_announce = min_announce - now
                     next_announce = endpoint.get('next_announce', -1)
-                    if next_announce >= 0:
-                        next_announce = next_announce - now
+                    next_announce_interval = next_announce - now if next_announce >= 0 else 0
+                    min_announce = endpoint.get('min_announce', -1)
+                    min_announce_interval = min_announce - now if min_announce >= 0 else 0
                     log.info(
-                        '%s: %s: next_ann: %s min_ann:%s (%d) msg: %s url: %s %s',
+                        '%s: %s: next_ann:%d (%s) min_ann:%d (%s) msg:%s url:%s %s',
                         torrent.torrent_id,
                         caller,
-                        self.format_time(next_announce),
-                        self.format_time(min_announce),
-                        next_announce - min_announce,
+                        next_announce,
+                        self.format_time(next_announce_interval),
+                        min_announce,
+                        self.format_time(min_announce_interval),
                         msg,
                         url,
                         cur,
